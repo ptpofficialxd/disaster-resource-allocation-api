@@ -1,5 +1,9 @@
 name: Deploy to Azure
 
+permissions:
+  id-token: write
+  contents: write
+
 on:
   push:
     branches: [main]
