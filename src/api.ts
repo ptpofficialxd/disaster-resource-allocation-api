@@ -105,6 +105,7 @@ app.post("/api/assignments", async (c) => {
         const timeConstraint = area.TimeConstraint;
         let assigned = false;
         for (const truck of truckList) {
+            if (truck.isAssigned) continue;
             const availableResources = truck.AvailableResources;
             const travelTime = truck.TravelTimeToArea[area.AreaID] || Infinity;
             let canDeliver = true;
@@ -164,24 +165,35 @@ app.post("/api/assignments", async (c) => {
         }
     }
     // Store assignments in Redis with a 30-minute expiration time
-    await redisClient.set("assignments", JSON.stringify(assignments), "EX", 1800);
-    return c.json({ message: "Assignments processed", assignments });
+    await Promise.all(
+        assignments.map((assignment) =>
+            redisClient.setex(
+                `assignments:${assignment.AreaID}`,
+                1800,
+                JSON.stringify(assignment)
+            )
+        )
+    );
 });
 
 /* GET /api/assignments */
 // Returns the last processed assignments, retrieving them from a Redis cache if available
 app.get("/api/assignments", async (c) => {
-    const assignments = await redisClient.get("assignments");
+    const keys = await redisClient.keys('assignments:*');
+    const assignments = await Promise.all(
+        keys.map(key => redisClient.get(key))
+    );
     return c.json({
         message: "Assignments retrieved",
-        assignments: JSON.parse(assignments || "[]"),
+        assignments: assignments.map(a => JSON.parse(a || "{}"))
     });
 });
 
 /* DELETE /api/assignments */
 // Clears the current assignment data from the cache
 app.delete("/api/assignments", async (c) => {
-    await redisClient.del("assignments");
+    const keys = await redisClient.keys('assignments:*');
+    if (keys.length) await redisClient.del(...keys);
     return c.json({ message: "Assignments cleared" });
 });
 
