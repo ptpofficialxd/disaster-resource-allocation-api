@@ -10,7 +10,7 @@ services:
     environment:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
-      - REDIS_PORT=6380
+      - REDIS_PORT=${REDIS_PORT}
   redis:
     image: redis:alpine
     container_name: disaster-api-redis
