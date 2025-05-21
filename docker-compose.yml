@@ -8,10 +8,9 @@ services:
     depends_on:
       - redis
     environment:
-      - NODE_ENV=production
       - REDIS_HOST=${REDIS_HOST}
-      - REDIS_PORT=6380
       - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_PORT=6380
   redis:
     image: redis:alpine
     container_name: disaster-api-redis
