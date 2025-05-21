@@ -8,6 +8,11 @@ on:
   push:
     branches: [main]
 
+env:
+  REDIS_HOST: ${{ secrets.REDIS_HOST }}
+  REDIS_PORT: ${{ secrets.REDIS_PORT }}
+  REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
