@@ -11,6 +11,8 @@ The Disaster Resource Allocation API is designed to assist a Disaster Management
 - **Hono**: To handle routing and middleware.
 - **Redis**: For caching assignment results to improve performance.
 - **Azure**: For deploying the API and hosting the live demo.
+- **Postman**: For testing API endpoints and ensuring functionality.
+- **Fork**: For version control and managing commits.
 
 ## API Endpoints
 1. **POST /api/areas**: Allows adding affected areas, with details such as urgency level, resources 
