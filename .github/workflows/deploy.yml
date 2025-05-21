@@ -40,6 +40,6 @@ jobs:
       - name: Deploy to App Service
         uses: azure/webapps-deploy@v2
         with:
-          app-name: disaster-resource-allocation-api
+          app-name: ptpofficialxd
           slot-name: production
           images: ptpofficialxd.azurecr.io/disaster-api-app:latest
