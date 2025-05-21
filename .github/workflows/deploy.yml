@@ -15,7 +15,7 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          environment: AzurePublicCloud
+          environment: AzureCloud
 
       - name: Login to ACR
         uses: docker/login-action@v3
