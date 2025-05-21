@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import redisClient from "./redisClient";
+import redis from "./redis";
 
 const app = new Hono();
 
@@ -60,7 +60,7 @@ app.post("/api/areas", validateArrayInput("areas"), async (c) => {
     // Store areas in Redis
     await Promise.all(
         areas.map((area) =>
-            redisClient.hset("areas", area.AreaID, JSON.stringify(area))
+            redis.hset("areas", area.AreaID, JSON.stringify(area))
         )
     );
     return c.json({ message: "Areas added", areas });
@@ -84,7 +84,7 @@ app.post("/api/trucks", validateArrayInput("trucks"), async (c) => {
     // Store trucks in Redis
     await Promise.all(
         trucks.map((truck) =>
-            redisClient.hset("trucks", truck.TruckID, JSON.stringify(truck))
+            redis.hset("trucks", truck.TruckID, JSON.stringify(truck))
         )
     );
     return c.json({ message: "Trucks added", trucks });
@@ -93,8 +93,8 @@ app.post("/api/trucks", validateArrayInput("trucks"), async (c) => {
 /* POST /api/assignments */
 // Processes and returns truck assignments for each area based on urgency, time constraints, and available resources
 app.post("/api/assignments", async (c) => {
-    const areas = await redisClient.hgetall("areas");
-    const trucks = await redisClient.hgetall("trucks");
+    const areas = await redis.hgetall("areas");
+    const trucks = await redis.hgetall("trucks");
     const assignments: any[] = [];
     const areaList = Object.values(areas).map((area) => JSON.parse(area));
     const truckList = Object.values(trucks).map((truck) => JSON.parse(truck));
@@ -137,7 +137,7 @@ app.post("/api/assignments", async (c) => {
                     updatedTruck.AvailableResources[resource] -=
                         requiredResources[resource];
                 }
-                await redisClient.hset(
+                await redis.hset(
                     "trucks",
                     truck.TruckID,
                     JSON.stringify(updatedTruck)
@@ -165,14 +165,14 @@ app.post("/api/assignments", async (c) => {
         }
     }
     // Store assignments in Redis with a 30-minute expiration time
-    await redisClient.set("assignments", JSON.stringify(assignments), "EX", 1800);
+    await redis.set("assignments", JSON.stringify(assignments), "EX", 1800);
     return c.json({ message: "Assignments processed", assignments });
 });
 
 /* GET /api/assignments */
 // Returns the last processed assignments, retrieving them from a Redis cache if available
 app.get("/api/assignments", async (c) => {
-    const assignments = await redisClient.get("assignments");
+    const assignments = await redis.get("assignments");
     return c.json({
         message: "Assignments retrieved",
         assignments: JSON.parse(assignments || "[]"),
@@ -182,24 +182,24 @@ app.get("/api/assignments", async (c) => {
 /* DELETE /api/assignments */
 // Clears the current assignment data from the cache
 app.delete("/api/assignments", async (c) => {
-    await redisClient.del("assignments");
+    await redis.del("assignments");
     return c.json({ message: "Assignments cleared" });
 });
 
-redisClient.on('connect', () => {
+redis.on('connect', () => {
     console.log('Redis: Connected to server');
   });
   
-  redisClient.on('ready', () => {
+  redis.on('ready', () => {
     console.log('Redis: Connection ready');
   });
   
-  redisClient.on('reconnecting', () => {
+  redis.on('reconnecting', () => {
     console.log('Redis: Reconnecting...');
   });
 
 // Error handling for Redis
-redisClient.on("error", (err) => {
+redis.on("error", (err) => {
     console.error("Redis Error:", err);
 });
 
