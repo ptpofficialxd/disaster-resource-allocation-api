@@ -10,7 +10,6 @@ interface Area {
     RequiredResources: Record<string, number>; // Resources needed for the area
     TimeConstraint: number; // Time within which resources must be delivered
 }
-
 interface Truck {
     TruckID: string; // Unique identifier for the truck
     AvailableResources: Record<string, number>; // Resources available in the truck
@@ -59,9 +58,7 @@ app.post("/api/areas", validateArrayInput("areas"), async (c) => {
     }
     // Store areas in Redis
     await Promise.all(
-        areas.map((area) =>
-            redis.hset("areas", area.AreaID, JSON.stringify(area))
-        )
+        areas.map((area) => redis.hset("areas", area.AreaID, JSON.stringify(area)))
     );
     return c.json({ message: "Areas added", areas });
 });
@@ -137,11 +134,7 @@ app.post("/api/assignments", async (c) => {
                     updatedTruck.AvailableResources[resource] -=
                         requiredResources[resource];
                 }
-                await redis.hset(
-                    "trucks",
-                    truck.TruckID,
-                    JSON.stringify(updatedTruck)
-                );
+                await redis.hset("trucks", truck.TruckID, JSON.stringify(updatedTruck));
                 assigned = true;
                 break;
             }
