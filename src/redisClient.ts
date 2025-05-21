@@ -1,22 +1,13 @@
 import Redis from "ioredis";
 
-const redisConfig = {
-  host: process.env.REDIS_HOST,
-  port: 6380,
-  password: process.env.REDIS_PASSWORD,
+const redisUri = `rediss://:${encodeURIComponent(process.env.REDIS_PASSWORD || '')}@${process.env.REDIS_HOST}:6380`;
+
+const redisClient = new Redis(redisUri, {
   tls: {
     servername: process.env.REDIS_HOST,
-    rejectUnauthorized: false,
+    rejectUnauthorized: false // ปิดการตรวจสอบ certificate ใน development
   },
-};
-
-console.log('Redis Connection Config:', {
-  host: redisConfig.host,
-  port: redisConfig.port,
-  hasPassword: !!redisConfig.password,
-  tlsEnabled: true
+  enableAutoPipelining: true,
 });
-
-const redisClient = new Redis(redisConfig);
 
 export default redisClient;
