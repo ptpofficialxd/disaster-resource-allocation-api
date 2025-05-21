@@ -15,14 +15,10 @@ The Disaster Resource Allocation API is designed to assist a Disaster Management
 - **Fork**: For version control and managing commits.
 
 ## API Endpoints
-1. **POST /api/areas**: Allows adding affected areas, with details such as urgency level, resources 
-needed, and time constraints. 
-2. **POST /api/trucks**: Allows adding resource trucks, with details about available resources and 
-travel times to areas. 
-3. **POST /api/assignments**: Processes and returns truck assignments for each area based on 
-urgency, time constraints, and available resources.
-4. **GET /api/assignments**: Returns the last processed assignments, retrieving them from a Redis 
-cache if available.
+1. **POST /api/areas**: Allows adding affected areas, with details such as urgency level, resources needed, and time constraints. 
+2. **POST /api/trucks**: Allows adding resource trucks, with details about available resources and travel times to areas. 
+3. **POST /api/assignments**: Processes and returns truck assignments for each area based on urgency, time constraints, and available resources.
+4. **GET /api/assignments**: Returns the last processed assignments, retrieving them from a Redis cache if available.
 5. **DELETE /api/assignments**: Clears the current assignment data from the cache.
 
 ## Input Data Structure
