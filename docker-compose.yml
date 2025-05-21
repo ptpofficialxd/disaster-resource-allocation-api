@@ -9,8 +9,9 @@ services:
       - redis
     environment:
       - NODE_ENV=production
-      - REDIS_HOST=redis
+      - REDIS_HOST=ptpofficialxd.redis.cache.windows.net
       - REDIS_PORT=6379
+      - REDIS_PASSWORD=kgbkTm5nFaRaO1b52rzoO4VZjzo2Ja0BhAzCaAYF82g=
   redis:
     image: redis:alpine
     container_name: disaster-api-redis
