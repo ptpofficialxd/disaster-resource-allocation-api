@@ -2,33 +2,37 @@ name: Deploy to Azure
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Login to Azure
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Build and push image
-      uses: docker/build-push-action@v5
-      with:
-        context: .
-        push: true
-        tags: ptpofficialxd.azurecr.io/disaster-api-app:latest
-        secrets: |
-          "username=${{ secrets.ACR_USERNAME }}"
-          "password=${{ secrets.ACR_PASSWORD }}"
+      - name: Login to ACR
+        uses: docker/login-action@v3
+        with:
+          registry: ptpofficialxd.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
 
-    - name: Deploy to App Service
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: disaster-resource-allocation-api
-        slot-name: production
-        images: ptpofficialxd.azurecr.io/disaster-api-app:latest 
+      - name: Build and push image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ptpofficialxd.azurecr.io/disaster-api-app:latest
+
+      - name: Deploy to App Service
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: disaster-resource-allocation-api
+          slot-name: production
+          images: ptpofficialxd.azurecr.io/disaster-api-app:latest
