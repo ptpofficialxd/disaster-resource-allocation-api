@@ -10,8 +10,8 @@ services:
     environment:
       - NODE_ENV=production
       - REDIS_HOST=${REDIS_HOST}
-      - REDIS_PORT=${REDIS_PORT}
-      - REDIS_PASSWORD=${REDIS_PORT}
+      - REDIS_PORT=6380
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
   redis:
     image: redis:alpine
     container_name: disaster-api-redis
