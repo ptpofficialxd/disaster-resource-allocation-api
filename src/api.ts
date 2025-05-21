@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import redis from "./redis";
+import redis from "./main";
 
 const app = new Hono();
 
@@ -184,23 +184,6 @@ app.get("/api/assignments", async (c) => {
 app.delete("/api/assignments", async (c) => {
     await redis.del("assignments");
     return c.json({ message: "Assignments cleared" });
-});
-
-redis.on('connect', () => {
-    console.log('Redis: Connected to server');
-  });
-  
-  redis.on('ready', () => {
-    console.log('Redis: Connection ready');
-  });
-  
-  redis.on('reconnecting', () => {
-    console.log('Redis: Reconnecting...');
-  });
-
-// Error handling for Redis
-redis.on("error", (err) => {
-    console.error("Redis Error:", err);
 });
 
 export default app;
