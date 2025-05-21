@@ -45,6 +45,7 @@ Data is stored in Redis for quick access and retrieval. The schema is designed t
 
 ### Visual Aids
 To enhance understanding, diagrams such as flowcharts and sequence diagrams are provided below to illustrate the API workflow and data interactions.
+![Flowchart](./images/Disaster-Resource-Allocation-API-Flowchart.png)
 
 ## Installation
 To install dependencies, run:
