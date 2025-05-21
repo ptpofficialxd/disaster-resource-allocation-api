@@ -1,13 +1,13 @@
 import Redis from "ioredis";
 
+const port = Number(Bun.env.REDIS_PORT);
+const useTls = port === 6380;
+
 const redisClient = new Redis({
   host: Bun.env.REDIS_HOST,
-  port: Number(Bun.env.REDIS_PORT),
+  port: port,
   password: Bun.env.REDIS_PASSWORD,
-  tls: Bun.env.REDIS_PORT === "6380" ? {
-    checkServerIdentity: () => undefined,
-    servername: Bun.env.REDIS_HOST,
-  } : undefined,
+  tls: useTls ? { checkServerIdentity: () => undefined } : undefined,
 });
 
 export default redisClient;
