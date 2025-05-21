@@ -1,13 +1,22 @@
 import Redis from "ioredis";
 
-const redisClient = new Redis({
-  host: Bun.env.REDIS_HOST,
-  port: Number(Bun.env.REDIS_PORT),
-  password: Bun.env.REDIS_PASSWORD,
+const redisConfig = {
+  host: process.env.REDIS_HOST,
+  port: Number(process.env.REDIS_PORT),
+  password: process.env.REDIS_PASSWORD,
   tls: {
-    servername: Bun.env.REDIS_HOST,
+    servername: process.env.REDIS_HOST,
     rejectUnauthorized: false,
   },
+};
+
+console.log('Redis Connection Config:', {
+  host: redisConfig.host,
+  port: redisConfig.port,
+  hasPassword: !!redisConfig.password,
+  tlsEnabled: true
 });
+
+const redisClient = new Redis(redisConfig);
 
 export default redisClient;

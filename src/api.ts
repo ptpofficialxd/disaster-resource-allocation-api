@@ -186,6 +186,18 @@ app.delete("/api/assignments", async (c) => {
     return c.json({ message: "Assignments cleared" });
 });
 
+redisClient.on('connect', () => {
+    console.log('Redis: Connected to server');
+  });
+  
+  redisClient.on('ready', () => {
+    console.log('Redis: Connection ready');
+  });
+  
+  redisClient.on('reconnecting', () => {
+    console.log('Redis: Reconnecting...');
+  });
+
 // Error handling for Redis
 redisClient.on("error", (err) => {
     console.error("Redis Error:", err);
