@@ -43,8 +43,8 @@ Each API endpoint is designed to handle specific operations, ensuring clarity an
 ### Data Structure Design
 Data is stored in Redis for quick access and retrieval. The schema is designed to facilitate efficient querying and ensure that the system can scale effectively as the number of requests increases.
 
-### Visual Aids
-To enhance understanding, diagrams such as flowcharts and sequence diagrams are provided below to illustrate the API workflow and data interactions.
+### Flowchart Diagram
+To enhance understanding, flowchart diagram is provided below to illustrate the API workflow and data interactions.
 ![Flowchart](./images/Disaster-Resource-Allocation-API-Flowchart.jpg)
 
 ## Installation
